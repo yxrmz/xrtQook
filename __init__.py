@@ -2387,7 +2387,8 @@ if __name__ == '__main__':
         codeMain += '{1}align_beamline({0}, E0)\n'.format(BLName, myTab)
         codeMain += '{0}{1} = define_plots()\n'.format(
             myTab, self.rootPlotItem.text())
-        codePlots = '\ndef define_plots():\n{0}plots = []\n'.format(myTab)
+        codePlots = '\ndef define_plots():\n{0}{1} = []\n'.format(
+            myTab, self.rootPlotItem.text())
 
         plotNames = []
         for ie in range(self.rootPlotItem.rowCount()):
@@ -2502,8 +2503,10 @@ if __name__ == '__main__':
                                 ieinit += '\n{2}{0}={1},'.format(
                                     paraname, self.quotize(paravalue), myTab*2)
             codePlots += ieinit.rstrip(",") + ")\n"
-            codePlots += "{0}plots.append({1})\n".format(myTab, tItem.text())
-        codePlots += "{0}return plots\n\n".format(myTab)
+            codePlots += "{0}{2}.append({1})\n".format(
+                myTab, tItem.text(), self.rootPlotItem.text())
+        codePlots += "{0}return {1}\n\n".format(
+            myTab, self.rootPlotItem.text())
 
         for ie in range(self.rootRunItem.rowCount()):
             if self.rootRunItem.child(ie, 0).text() == '_object':
