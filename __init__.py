@@ -2391,8 +2391,8 @@ if __name__ == '__main__':
 
         plotNames = []
         for ie in range(self.rootPlotItem.rowCount()):
-            ieinit = "\n{0}plot = ".format(myTab)
             tItem = self.rootPlotItem.child(ie, 0)
+            ieinit = "\n{0}{1} = ".format(myTab, tItem.text())
             plotNames.append(str(tItem.text()))
             for ieph in range(tItem.rowCount()):
                 if tItem.child(ieph, 0).text() == '_object':
@@ -2502,7 +2502,7 @@ if __name__ == '__main__':
                                 ieinit += '\n{2}{0}={1},'.format(
                                     paraname, self.quotize(paravalue), myTab*2)
             codePlots += ieinit.rstrip(",") + ")\n"
-            codePlots += "{0}plots.append(plot)\n".format(myTab)
+            codePlots += "{0}plots.append({1})\n".format(myTab, tItem.text())
         codePlots += "{0}return plots\n\n".format(myTab)
 
         for ie in range(self.rootRunItem.rowCount()):
