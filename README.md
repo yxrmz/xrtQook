@@ -1,2 +1,2 @@
 # xrtQook
-Qt -based GUI for the xrt ray-tracing package
+Qt-based GUI for the ray-tracing package xrt

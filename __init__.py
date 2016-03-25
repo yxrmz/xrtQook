@@ -174,6 +174,7 @@ path_to_xrt = os.path.dirname(os.path.dirname(
     os.path.abspath(xrt.__file__)))
 myTab = 4*" "
 
+
 class XrtQook(QWidget):
     def __init__(self):
         super(XrtQook, self).__init__()
@@ -2445,7 +2446,7 @@ if __name__ == '__main__':
                                 tmpParavalue = paravalue * 2
                                 while any(str(pltName + '.') in paravalue for
                                           pltName in plotNames) and\
-                                          tmpParavalue != paravalue:
+                                        tmpParavalue != paravalue:
                                     tmpParavalue = paravalue
                                     for ipn in range(
                                             self.rootPlotItem.rowCount()):
@@ -2483,8 +2484,8 @@ if __name__ == '__main__':
                             else:
                                 tmpParavalue = paravalue * 2
                                 while any(str(pltName + '.') in paravalue for
-                                            pltName in plotNames) and\
-                                            tmpParavalue != paravalue:
+                                          pltName in plotNames) and\
+                                        tmpParavalue != paravalue:
                                     tmpParavalue = paravalue
                                     for ipn in range(
                                             self.rootPlotItem.rowCount()):
