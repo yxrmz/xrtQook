@@ -1203,7 +1203,6 @@ Compute Units: {3}\nFP64 Support: {4}'.format(platform.name,
                             break
 
     def colorizeTabText(self, item):
-        print self.blColorCounter
         if item.model() == self.beamLineModel:
             color = QtCore.Qt.red if self.blColorCounter > 0 else\
                 QtCore.Qt.black
