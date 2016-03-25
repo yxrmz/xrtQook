@@ -1049,6 +1049,13 @@ Compute Units: {3}\nFP64 Support: {4}'.format(platform.name,
             instanceStr = 'Instance of {0}'.format(obj.split('.')[-1])
         return instanceStr
 
+    def classNameToStr(self, name):
+        className = str(name)
+        if len(className) > 2:
+            return '{0}{1}'.format(className[:2].lower(), className[2:])
+        else:
+            return className.lower()
+
     def addElement(self, name, obj, copyFrom=None):
         if copyFrom is not None:
             for i in range(copyFrom.rowCount()):
@@ -1059,7 +1066,7 @@ Compute Units: {3}\nFP64 Support: {4}'.format(platform.name,
                     break
 
         for i in range(99):
-            elementName = str(name) + '{:02d}'.format(i+1)
+            elementName = self.classNameToStr(name) + '{:02d}'.format(i+1)
             dupl = False
             for ibm in range(self.rootBLItem.rowCount()):
                 if str(self.rootBLItem.child(ibm, 0).text()) ==\
@@ -1164,31 +1171,39 @@ Compute Units: {3}\nFP64 Support: {4}'.format(platform.name,
                             obj = str(grandparent.child(i, 1).text())
                             break
             if obj is not None and str(parent.text()) != 'output':
-                for defArg, defArgVal in self.getParams(obj):
-                    if str(defArg) == str(parent.child(itemRow, 0).text()):
-                        if str(defArgVal) != str(item.text()):
-                            color = QtCore.Qt.blue
-                        else:
-                            color = QtCore.Qt.black
-                        self.setIFontColor(parent.child(itemRow, 0), color)
-                        break
                 if str(parent.child(itemRow, 0).text()) == 'beam':
+                    color = None
                     if str(item.text()) == 'None':
                         color = QtCore.Qt.red
                         counter = 1
-                    else:
+                    elif parent.child(itemRow, 0).foreground().color() ==\
+                            QtCore.Qt.red:
                         color = QtCore.Qt.black
                         counter = -1
-                    self.setIFontColor(parent.child(itemRow, 0), color)
+                    else:
+                        counter = 0
                     if item.model() == self.beamLineModel:
                         self.blColorCounter += counter
                     else:
                         self.pltColorCounter += counter
                     self.colorizeTabText(item)
-                    if parent.parent() != self.rootPlotItem:
-                        self.setIFontColor(parent.parent(), color)
+                    if color is not None:
+                        self.setIFontColor(parent.child(itemRow, 0), color)
+                        if parent.parent() != self.rootPlotItem:
+                            self.setIFontColor(parent.parent(), color)
+                if parent.child(itemRow, 0).foreground().color() !=\
+                        QtCore.Qt.red:
+                    for defArg, defArgVal in self.getParams(obj):
+                        if str(defArg) == str(parent.child(itemRow, 0).text()):
+                            if str(defArgVal) != str(item.text()):
+                                color = QtCore.Qt.blue
+                            else:
+                                color = QtCore.Qt.black
+                            self.setIFontColor(parent.child(itemRow, 0), color)
+                            break
 
     def colorizeTabText(self, item):
+        print self.blColorCounter
         if item.model() == self.beamLineModel:
             color = QtCore.Qt.red if self.blColorCounter > 0 else\
                 QtCore.Qt.black
@@ -1240,7 +1255,7 @@ Compute Units: {3}\nFP64 Support: {4}'.format(platform.name,
 
     def addPlot(self, copyFrom=None):
         for i in range(99):
-            plotName = 'Plot{:02d}'.format(i+1)
+            plotName = 'plot{:02d}'.format(i+1)
             dupl = False
             for ibm in range(self.rootPlotItem.rowCount()):
                 if str(self.rootPlotItem.child(ibm, 0).text()) ==\
@@ -1349,7 +1364,7 @@ Compute Units: {3}\nFP64 Support: {4}'.format(platform.name,
 
     def addMaterial(self, name, obj):
         for i in range(99):
-            matName = str(name) + '{:02d}'.format(i+1)
+            matName = self.classNameToStr(name) + '{:02d}'.format(i+1)
             dupl = False
             for ibm in range(self.rootMatItem.rowCount()):
                 if str(self.rootMatItem.child(ibm, 0).text()) == str(matName):
