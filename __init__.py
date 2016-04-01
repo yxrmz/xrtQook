@@ -786,6 +786,7 @@ Compute Units: {3}\nFP64 Support: {4}'.format(platform.name,
 
     def showObjHelp(self, obj):
         self.curObj = obj
+        self.webHelp.page().setLinkDelegationPolicy(0)
         argSpecStr = '('
         for arg, argVal in self.getParams(obj):
             argSpecStr += '{0}={1}, '.format(arg, argVal)
@@ -969,6 +970,7 @@ Compute Units: {3}\nFP64 Support: {4}'.format(platform.name,
                         fVal + (maxFVLen - len(fVal)) * ' ')
                     argDocStr += spacerH
         argDocStr += '\n'
+        self.webHelp.page().setLinkDelegationPolicy(0)
         if isSphinx:
             cntx = generate_context(
                 name="OpenCL Platforms and Devices",
