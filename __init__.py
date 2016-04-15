@@ -2584,7 +2584,7 @@ if __name__ == '__main__':
                 saveMsg = 'Script saved to {}'.format(
                     os.path.basename(str(self.saveFileName)))
                 self.tabs.setTabText(
-                    4, os.path.basename(str(self.saveFileName)))
+                    5, os.path.basename(str(self.saveFileName)))
                 if isSpyderConsole:
                     self.codeConsole.wdir = os.path.dirname(
                         str(self.saveFileName))
