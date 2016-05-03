@@ -2118,11 +2118,12 @@ Compute Units: {3}\nFP64 Support: {4}'.format(platform.name,
             dummy = unicode  # test for Python3 compatibility analysis:ignore
         except NameError:
             unicode = str
-        if isinstance(self.getVal(value), str) or\
-                isinstance(self.getVal(value), unicode):
+        if isinstance(self.getVal(value), (str, unicode)):
             if 'np.' not in value and\
                     (str(self.rootBLItem.text())+'.') not in value:
                 value = 'r\"{}\"'.format(value)
+        if str(value) == 'round':
+            value = 'r\"{}\"'.format(value)
         if isinstance(self.getVal(value), tuple):
             value = list(self.getVal(value))
         return str(value)
@@ -2273,7 +2274,9 @@ if __name__ == '__main__':
                                     paravalue)
                             if paravalue != str(arg_def) or\
                                     paraname == 'bl':
-                                if paraname not in ['bl', 'material']:
+                                if paraname not in ['bl',
+                                                    'material',
+                                                    'material2']:
                                     paravalue = self.quotize(paravalue)
                                 ieinit += '\n{2}{0}={1},'.format(
                                     paraname, paravalue, myTab*2)
