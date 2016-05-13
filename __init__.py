@@ -2228,6 +2228,7 @@ if __name__ == '__main__':
                 autoX = False
                 autoZ = False
                 autoPitch = False
+                autoBragg = False
                 matType = 'None'
                 for ieph in range(tItem.rowCount()):
                     if tItem.child(ieph, 0).text() == '_object':
@@ -2264,6 +2265,9 @@ if __name__ == '__main__':
                             #    paravalue = '0.0'
                             if paraname == "pitch" and ('auto' in paravalue):
                                 autoPitch = True
+                                paravalue = '0.0'
+                            if paraname == "bragg" and ('auto' in paravalue):
+                                autoBragg = True
                                 paravalue = '0.0'
                             if paraname == "material":
                                 matType = self.whichCrystal(paravalue)
@@ -2348,7 +2352,7 @@ if __name__ == '__main__':
                                 BLName, tItem.text(), myTab)
                             codeAlignBL += '{2}print(\"{1}.center:\", {0}.{1}.center)\n\n'.format( # analysis:ignore
                                 BLName, tItem.text(), myTab)
-                            if autoPitch:
+                            if autoPitch or autoBragg:
                                 if matType != 'None':
                                     codeAlignBL += '{1}braggT = {0}.get_Bragg_angle(energy)\n'.format( # analysis:ignore
                                         matName, myTab)
@@ -2377,10 +2381,18 @@ if __name__ == '__main__':
                                     codeAlignBL += '{0}th2pitch = np.sqrt(1. - loBeam.a[0]**2)\n'.format(myTab) # analysis:ignore
                                     codeAlignBL += '{0}targetPitch = np.arcsin(np.sin(braggT) / th2pitch) -\\\n{0}{0}theta0\n'.format(myTab) # analysis:ignore
                                     codeAlignBL += '{0}targetPitch += alphaT + lauePitch\n'.format(myTab) # analysis:ignore
-                                    codeAlignBL += '{2}{0}.{1}.pitch = targetPitch\n'.format( # analysis:ignore
-                                        BLName, tItem.text(), myTab)
-                                    codeAlignBL += '{2}print(\"{1}.pitch:\", np.degrees({0}.{1}.pitch), \"degrees\")\n\n'.format( # analysis:ignore
-                                        BLName, tItem.text(), myTab)
+                                    if autoBragg:
+                                        strPitch = 'bragg'
+                                        addPitch = '-{0}.{1}.pitch'.format(
+                                            BLName, tItem.text())
+                                    else:
+                                        strPitch = 'pitch'
+                                        addPitch = ''
+                                    codeAlignBL += '{2}{0}.{1}.{3} = targetPitch{4}\n'.format( # analysis:ignore
+                                        BLName, tItem.text(), myTab,
+                                        strPitch, addPitch)
+                                    codeAlignBL += '{2}print(\"{1}.{3}:\", np.degrees({0}.{1}.{3}), \"degrees\")\n\n'.format( # analysis:ignore
+                                        BLName, tItem.text(), myTab, strPitch)
                             codeAlignBL += '{5}{0} = {1}.{2}.{3}({4})\n'.format( # analysis:ignore
                                 paraOutput.rstrip(', '),
                                 BLName, tItem.text(),
